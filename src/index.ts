@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import recursive from 'recursive-readdir';
 import fs from 'fs';
 import {readScriptParams} from "./readScriptParams";
