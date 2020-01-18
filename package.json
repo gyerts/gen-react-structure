@@ -1,12 +1,15 @@
 {
    "name": "gen-react-structure",
-   "version": "0.0.5",
+   "version": "0.0.26",
    "description": "",
    "main": "bin/index.js",
    "types": "src/index.d.ts",
    "scripts": {
       "clean": "rm -rf ./bin",
-      "build": "npm run clean && tsc"
+      "build": "npm run clean && tsc",
+      "npm_adduser": "npm adduser",
+      "increment_version": "npm version patch -git-tag-version false",
+      "npm_publish": "npm run build && npm run increment_version && npm publish"
    },
    "author": "Yuriy Gyerts",
    "license": "MIT",

@@ -7,6 +7,6 @@ exports.readScriptParams = function (commands) {
     });
     console.log(ops);
     if (ops.init) {
-        commands.initComponents(process.argv[1]);
+        commands.initComponents(process.argv[1].replace('node_modules/.bin/gen-react-structure', ''));
     }
 };

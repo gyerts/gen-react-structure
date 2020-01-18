@@ -11,6 +11,6 @@ export const readScriptParams = (commands: ICommands) => {
    console.log(ops);
 
    if (ops.init) {
-      commands.initComponents(process.argv[1].replace('node_modules/.bin/gen-react-structure', ''));
+      commands.initComponents(process.argv[1].replace('/node_modules/.bin/gen-react-structure', ''));
    }
 };
