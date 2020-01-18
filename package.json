@@ -1,13 +1,12 @@
 {
    "name": "gen-react-structure",
-   "version": "0.0.4",
+   "version": "0.0.5",
    "description": "",
    "main": "bin/index.js",
    "types": "src/index.d.ts",
    "scripts": {
       "clean": "rm -rf ./bin",
-      "build": "tsc",
-      "gen": "npm run clean && tsc && node bin/index.js"
+      "build": "npm run clean && tsc"
    },
    "author": "Yuriy Gyerts",
    "license": "MIT",
