@@ -1,20 +1,24 @@
 #!/usr/bin/env node
 
-import recursive from 'recursive-readdir';
-import fs from 'fs';
 import {readScriptParams} from "./readScriptParams";
+import {findTrackingComponents} from "./find/findTrackingComponents";
+import {parseReactComponentFileStructure} from "./parse/reactComponentJson";
+import {parseReactComponentJson} from "./parse/reactComponentFileStructure";
+import {generateImpls} from "./generate/impls";
+import {parseReactStructureJson} from "./parse/reactStructureJson";
 
-export const initComponents = (workingDir: string) => {
-   // const fileContent: string = fs.readFileSync(`${distPath}/phrases.txt`).toString('utf-8');
+export const initComponents = async (workingDir: string) => {
+   const paths: string[] = await findTrackingComponents(workingDir);
+   console.log('found components:', paths);
 
-   console.log(workingDir)
+   const reactStructure = parseReactStructureJson(workingDir);
 
-   // recursive(`${distPath}/translates`, (err: Error, files: string[]) => {
-   //    console.log(files);
-      // files.map((filePath: string) => {
-      //    generateTypesFile(distTypesFile, phrases);
-      // });
-   // });
+   console.log('reactStructure:', reactStructure);
+
+   paths.map(path => {
+      generateImpls( workingDir, path, parseReactComponentJson(path), reactStructure);
+      parseReactComponentFileStructure(path);
+   });
 };
 
 readScriptParams({

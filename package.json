@@ -17,6 +17,7 @@
       "gen-react-structure": "./bin/index.js"
    },
    "dependencies": {
+      "mkdirp": "^0.5.1",
       "recursive-readdir": "^2.2.2",
       "stdio": "^2.0.1"
    },
