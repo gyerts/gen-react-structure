@@ -19,7 +19,7 @@ export const generateImpls = (rootPath: string, componentPath: string, reactComp
                // console.error(err);
             });
 
-            reactStructure.templates.forEach(t => {
+            reactStructure.templates.impls.forEach(t => {
                if (t.workspace === impl.workspace) {
                   const templatePath = path.join(rootPath, t.layouts[layout]);
                   const dest = path.join(componentPath, 'view', impl.workspace, layout, 'index.tsx');
@@ -33,6 +33,10 @@ export const generateImpls = (rootPath: string, componentPath: string, reactComp
                   }
                }
             });
+         });
+
+         generateTemplate(`${componentPath}/view/index.tsx`, readTemplate(reactStructure.templates.index), {
+            ComponentName: componentPath.split('/').slice(-1)[0],
          });
       });
    });

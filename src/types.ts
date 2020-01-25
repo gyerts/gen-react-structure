@@ -4,9 +4,12 @@ export type IReactStructure = {
    "workspaces": { "name": string }[],
 
    "templates": {
-      "workspace": string,
-      "layouts": { [key: string]: string } // layout: templatePath
-   }[]
+      "index": string,
+      "impls": {
+         "workspace": string,
+         "layouts": { [key: string]: string } // layout: templatePath
+      }[]
+   }
 }
 
 export type IImpl = {
