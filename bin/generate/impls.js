@@ -16,13 +16,15 @@ exports.generateImpls = function (rootPath, componentPath, reactComponent, react
                 mkdirp(componentPath + "/view/" + impl.workspace + "/" + layout, function (err) {
                     // console.error(err);
                 });
-                reactStructure.templates.impls.forEach(function (t) {
+                reactStructure.templates.component.view.impls.forEach(function (t) {
                     if (t.workspace === impl.workspace) {
                         var templatePath = path.join(rootPath, t.layouts[layout]);
                         var dest = path.join(componentPath, 'view', impl.workspace, layout, 'index.tsx');
                         if (templatePath && !fileExists_1.fileExists(dest)) {
                             generateTemplate_1.generateTemplate(dest, readTemplate_1.readTemplate(templatePath), {
                                 ComponentName: componentPath.split('/').slice(-1)[0],
+                                Ws: "" + impl.workspace[0].toUpperCase() + impl.workspace.slice(1).toLowerCase(),
+                                Layout: "" + layout[0].toUpperCase() + layout.slice(1).toLowerCase(),
                             });
                         }
                         else {
@@ -31,8 +33,9 @@ exports.generateImpls = function (rootPath, componentPath, reactComponent, react
                     }
                 });
             });
-            generateTemplate_1.generateTemplate(componentPath + "/view/index.tsx", readTemplate_1.readTemplate(reactStructure.templates.index), {
+            generateTemplate_1.generateTemplate(componentPath + "/view/index.tsx", readTemplate_1.readTemplate(reactStructure.templates.component.view.index), {
                 ComponentName: componentPath.split('/').slice(-1)[0],
+                Ws: "" + impl.workspace[0].toUpperCase() + impl.workspace.slice(1).toLowerCase(),
             });
         });
     });

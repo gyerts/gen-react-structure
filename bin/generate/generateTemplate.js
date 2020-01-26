@@ -5,6 +5,8 @@ exports.generateTemplate = function (dest, template, variables) {
     console.log('generate template to:', dest);
     var templ = template;
     templ = templ.replace(/{{ComponentName}}/g, variables.ComponentName);
+    variables.Ws && (templ = templ.replace(/{{Ws}}/g, variables.Ws));
+    variables.Layout && (templ = templ.replace(/{{Layout}}/g, variables.Layout));
     console.log(templ);
     try {
         fs.writeFileSync(dest, templ);

@@ -19,7 +19,7 @@ export const generateImpls = (rootPath: string, componentPath: string, reactComp
                // console.error(err);
             });
 
-            reactStructure.templates.impls.forEach(t => {
+            reactStructure.templates.component.view.impls.forEach(t => {
                if (t.workspace === impl.workspace) {
                   const templatePath = path.join(rootPath, t.layouts[layout]);
                   const dest = path.join(componentPath, 'view', impl.workspace, layout, 'index.tsx');
@@ -27,6 +27,8 @@ export const generateImpls = (rootPath: string, componentPath: string, reactComp
                   if (templatePath && !fileExists(dest)) {
                      generateTemplate(dest, readTemplate(templatePath), {
                         ComponentName: componentPath.split('/').slice(-1)[0],
+                        Ws: `${impl.workspace[0].toUpperCase()}${impl.workspace.slice(1).toLowerCase()}`,
+                        Layout: `${layout[0].toUpperCase()}${layout.slice(1).toLowerCase()}`,
                      });
                   } else {
                      console.error(`In workspace "${impl.workspace}", was not found template "${layout}"`, templatePath, dest, fileExists(dest));
@@ -35,8 +37,9 @@ export const generateImpls = (rootPath: string, componentPath: string, reactComp
             });
          });
 
-         generateTemplate(`${componentPath}/view/index.tsx`, readTemplate(reactStructure.templates.index), {
+         generateTemplate(`${componentPath}/view/index.tsx`, readTemplate(reactStructure.templates.component.view.index), {
             ComponentName: componentPath.split('/').slice(-1)[0],
+            Ws: `${impl.workspace[0].toUpperCase()}${impl.workspace.slice(1).toLowerCase()}`,
          });
       });
    });

@@ -43,6 +43,8 @@ var reactComponentJson_1 = require("./parse/reactComponentJson");
 var reactComponentFileStructure_1 = require("./parse/reactComponentFileStructure");
 var impls_1 = require("./generate/impls");
 var reactStructureJson_1 = require("./parse/reactStructureJson");
+var findComponentsToCreate_1 = require("./find/findComponentsToCreate");
+var component_1 = require("./generate/component");
 exports.initComponents = function (workingDir) { return __awaiter(void 0, void 0, void 0, function () {
     var paths, reactStructure;
     return __generator(this, function (_a) {
@@ -61,6 +63,27 @@ exports.initComponents = function (workingDir) { return __awaiter(void 0, void 0
         }
     });
 }); };
+exports.createComponents = function (workingDir) { return __awaiter(void 0, void 0, void 0, function () {
+    var reactStructure, paths;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                reactStructure = reactStructureJson_1.parseReactStructureJson(workingDir);
+                return [4 /*yield*/, findComponentsToCreate_1.findComponentsToCreate(workingDir)];
+            case 1:
+                paths = _a.sent();
+                console.log('found components:', paths);
+                paths.forEach(function (path) {
+                    component_1.generateComponent(path.path, path.componentName, reactStructure);
+                });
+                return [4 /*yield*/, exports.initComponents(workingDir)];
+            case 2:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); };
 readScriptParams_1.readScriptParams({
-    initComponents: exports.initComponents
+    initComponents: exports.initComponents,
+    createComponents: exports.createComponents,
 });

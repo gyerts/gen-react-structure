@@ -1,14 +1,20 @@
 export type IReactStructure = {
-   "layouts": { "name": string }[],
-   "mainLayout": string,
-   "workspaces": { "name": string }[],
+   layouts: { name: string }[],
+   mainLayout: string,
+   workspaces: { name: string }[],
 
-   "templates": {
-      "index": string,
-      "impls": {
-         "workspace": string,
-         "layouts": { [key: string]: string } // layout: templatePath
-      }[]
+   templates: {
+      component: {
+         index: string
+         reactStructureJson: string
+         view: {
+            index: string
+            impls: {
+               workspace: string,
+               layouts: { [key: string]: string } // layout: templatePath
+            }[]
+         }
+      }
    }
 }
 
@@ -23,4 +29,6 @@ export type IReactComponent = {
 
 export type IVariables = {
    ComponentName: string
+   Ws?: string
+   Layout?: string
 }
