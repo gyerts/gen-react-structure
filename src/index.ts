@@ -2,8 +2,7 @@
 
 import {readScriptParams} from "./readScriptParams";
 import {findTrackingComponents} from "./find/findTrackingComponents";
-import {parseReactComponentFileStructure} from "./parse/reactComponentJson";
-import {parseReactComponentJson} from "./parse/reactComponentFileStructure";
+import {parseReactComponentJson} from "./parse/reactComponentJson";
 import {generateImpls} from "./generate/impls";
 import {parseReactStructureJson} from "./parse/reactStructureJson";
 import {findComponentsToCreate} from "./find/findComponentsToCreate";
@@ -19,7 +18,6 @@ export const initComponents = async (workingDir: string) => {
 
    paths.map(path => {
       generateImpls( workingDir, path, parseReactComponentJson(path), reactStructure);
-      parseReactComponentFileStructure(path);
    });
 };
 

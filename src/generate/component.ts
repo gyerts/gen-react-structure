@@ -1,5 +1,4 @@
-import {IImpl, IReactComponent, IReactStructure} from "../types";
-import {fileExists} from "../find/fileExists";
+import {IReactStructureJson} from "../types";
 import {generateTemplate} from "./generateTemplate";
 import {readTemplate} from "../read/readTemplate";
 
@@ -7,7 +6,7 @@ const mkdirp = require('mkdirp');
 var path = require('path');
 
 
-export const generateComponent = (componentPath: string, componentName: string, reactStructure: IReactStructure) => {
+export const generateComponent = (componentPath: string, componentName: string, reactStructure: IReactStructureJson) => {
    console.log('* create folder:', path.join(componentPath, componentName));
    mkdirp(path.join(componentPath, componentName), function(err: any) {
       if (err) {

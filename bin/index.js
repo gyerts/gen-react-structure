@@ -40,7 +40,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var readScriptParams_1 = require("./readScriptParams");
 var findTrackingComponents_1 = require("./find/findTrackingComponents");
 var reactComponentJson_1 = require("./parse/reactComponentJson");
-var reactComponentFileStructure_1 = require("./parse/reactComponentFileStructure");
 var impls_1 = require("./generate/impls");
 var reactStructureJson_1 = require("./parse/reactStructureJson");
 var findComponentsToCreate_1 = require("./find/findComponentsToCreate");
@@ -56,8 +55,7 @@ exports.initComponents = function (workingDir) { return __awaiter(void 0, void 0
                 reactStructure = reactStructureJson_1.parseReactStructureJson(workingDir);
                 console.log('reactStructure:', reactStructure);
                 paths.map(function (path) {
-                    impls_1.generateImpls(workingDir, path, reactComponentFileStructure_1.parseReactComponentJson(path), reactStructure);
-                    reactComponentJson_1.parseReactComponentFileStructure(path);
+                    impls_1.generateImpls(workingDir, path, reactComponentJson_1.parseReactComponentJson(path), reactStructure);
                 });
                 return [2 /*return*/];
         }

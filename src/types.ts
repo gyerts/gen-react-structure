@@ -1,7 +1,6 @@
-export type IReactStructure = {
-   layouts: { name: string }[],
-   mainLayout: string,
-   workspaces: { name: string }[],
+export type IReactStructureJson = {
+   impls: { name: string }[],
+   mainImpl: string,
 
    templates: {
       component: {
@@ -9,26 +8,17 @@ export type IReactStructure = {
          reactStructureJson: string
          view: {
             index: string
-            impls: {
-               workspace: string,
-               layouts: { [key: string]: string } // layout: templatePath
-            }[]
+            impls: { [key: string]: string } // impl: template-path
          }
       }
    }
 }
 
-export type IImpl = {
-   workspace: string
-   layouts: string[]
+export type IReactComponentJson = {
+   impls: string[]
 };
-
-export type IReactComponent = {
-   implementation: IImpl[]
-}
 
 export type IVariables = {
    ComponentName: string
-   Ws?: string
-   Layout?: string
+   Impl?: string
 }

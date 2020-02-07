@@ -8,8 +8,7 @@ export const generateTemplate = (dest: string, template: string, variables: IVar
       let templ = template;
 
       templ = templ.replace(/{{ComponentName}}/g, variables.ComponentName);
-      variables.Ws && (templ = templ.replace(/{{Ws}}/g, variables.Ws));
-      variables.Layout && (templ = templ.replace(/{{Layout}}/g, variables.Layout));
+      variables.Impl && (templ = templ.replace(/{{Impl}}/g, variables.Impl));
 
       console.log(templ);
 

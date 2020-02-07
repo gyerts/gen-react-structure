@@ -1,4 +1,4 @@
-import {IImpl, IReactComponent, IReactStructure} from "../types";
+import {IReactComponentJson, IReactStructureJson} from "../types";
 import {fileExists} from "../find/fileExists";
 import {generateTemplate} from "./generateTemplate";
 import {readTemplate} from "../read/readTemplate";
@@ -7,39 +7,40 @@ const mkdirp = require('mkdirp');
 var path = require('path');
 
 
-export const generateImpls = (rootPath: string, componentPath: string, reactComponent: IReactComponent, reactStructure: IReactStructure) => {
+const getImplName = (impl: string): string => {
+   if (impl.match(/[`"'\-=\/*+,~!@#$%^&()_№<>?]/g)) {
+      throw Error(`impl name should not contain any spec symbols exclude . (point symbol), current name is: "${impl}"`);
+   }
+   return impl.split('.').map(s => `${s[0].toUpperCase()}${s.slice(1)}`).join('');
+};
+
+const getComponentName = (componentPath: string): string => {
+   return componentPath.split('/').slice(-1)[0];
+};
+
+export const generateImpls = (rootPath: string, componentPath: string, reactComponent: IReactComponentJson, reactStructure: IReactStructureJson) => {
    console.log('reactComponent: ', reactComponent);
-   reactComponent.implementation.map((impl: IImpl) => {
-      mkdirp(`${componentPath}/view/${impl.workspace}`, function(err: any) {
+   reactComponent.impls.map((impl: string) => {
+      mkdirp(`${componentPath}/view/${impl}`, function(err: any) {
          if (err) {
             // console.error(err);
          }
-         impl.layouts.map((layout: string) => {
-            mkdirp(`${componentPath}/view/${impl.workspace}/${layout}`, function(err: any) {
-               // console.error(err);
-            });
 
-            reactStructure.templates.component.view.impls.forEach(t => {
-               if (t.workspace === impl.workspace) {
-                  const templatePath = path.join(rootPath, t.layouts[layout]);
-                  const dest = path.join(componentPath, 'view', impl.workspace, layout, 'index.tsx');
+         const templatePath = path.join(rootPath, reactStructure.templates.component.view.impls[impl]);
+         const dest = path.join(componentPath, 'view', impl, 'index.tsx');
 
-                  if (templatePath && !fileExists(dest)) {
-                     generateTemplate(dest, readTemplate(templatePath), {
-                        ComponentName: componentPath.split('/').slice(-1)[0],
-                        Ws: `${impl.workspace[0].toUpperCase()}${impl.workspace.slice(1).toLowerCase()}`,
-                        Layout: `${layout[0].toUpperCase()}${layout.slice(1).toLowerCase()}`,
-                     });
-                  } else {
-                     console.error(`In workspace "${impl.workspace}", was not found template "${layout}"`, templatePath, dest, fileExists(dest));
-                  }
-               }
+         if (templatePath && !fileExists(dest)) {
+            generateTemplate(dest, readTemplate(templatePath), {
+               ComponentName: getComponentName(componentPath),
+               Impl: getImplName(impl),
             });
-         });
+         } else {
+            console.error(`Impl "${impl}", template was not found`, templatePath, dest, fileExists(dest));
+         }
 
          generateTemplate(`${componentPath}/view/index.tsx`, readTemplate(reactStructure.templates.component.view.index), {
-            ComponentName: componentPath.split('/').slice(-1)[0],
-            Ws: `${impl.workspace[0].toUpperCase()}${impl.workspace.slice(1).toLowerCase()}`,
+            ComponentName: getComponentName(componentPath),
+            Impl: getImplName(impl),
          });
       });
    });

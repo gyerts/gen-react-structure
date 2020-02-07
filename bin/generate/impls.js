@@ -5,37 +5,36 @@ var generateTemplate_1 = require("./generateTemplate");
 var readTemplate_1 = require("../read/readTemplate");
 var mkdirp = require('mkdirp');
 var path = require('path');
+var getImplName = function (impl) {
+    if (impl.match(/[`"'\-=\/*+,~!@#$%^&()_№<>?]/g)) {
+        throw Error("impl name should not contain any spec symbols exclude . (point symbol), current name is: \"" + impl + "\"");
+    }
+    return impl.split('.').map(function (s) { return "" + s[0].toUpperCase() + s.slice(1); }).join('');
+};
+var getComponentName = function (componentPath) {
+    return componentPath.split('/').slice(-1)[0];
+};
 exports.generateImpls = function (rootPath, componentPath, reactComponent, reactStructure) {
     console.log('reactComponent: ', reactComponent);
-    reactComponent.implementation.map(function (impl) {
-        mkdirp(componentPath + "/view/" + impl.workspace, function (err) {
+    reactComponent.impls.map(function (impl) {
+        mkdirp(componentPath + "/view/" + impl, function (err) {
             if (err) {
                 // console.error(err);
             }
-            impl.layouts.map(function (layout) {
-                mkdirp(componentPath + "/view/" + impl.workspace + "/" + layout, function (err) {
-                    // console.error(err);
+            var templatePath = path.join(rootPath, reactStructure.templates.component.view.impls[impl]);
+            var dest = path.join(componentPath, 'view', impl, 'index.tsx');
+            if (templatePath && !fileExists_1.fileExists(dest)) {
+                generateTemplate_1.generateTemplate(dest, readTemplate_1.readTemplate(templatePath), {
+                    ComponentName: getComponentName(componentPath),
+                    Impl: getImplName(impl),
                 });
-                reactStructure.templates.component.view.impls.forEach(function (t) {
-                    if (t.workspace === impl.workspace) {
-                        var templatePath = path.join(rootPath, t.layouts[layout]);
-                        var dest = path.join(componentPath, 'view', impl.workspace, layout, 'index.tsx');
-                        if (templatePath && !fileExists_1.fileExists(dest)) {
-                            generateTemplate_1.generateTemplate(dest, readTemplate_1.readTemplate(templatePath), {
-                                ComponentName: componentPath.split('/').slice(-1)[0],
-                                Ws: "" + impl.workspace[0].toUpperCase() + impl.workspace.slice(1).toLowerCase(),
-                                Layout: "" + layout[0].toUpperCase() + layout.slice(1).toLowerCase(),
-                            });
-                        }
-                        else {
-                            console.error("In workspace \"" + impl.workspace + "\", was not found template \"" + layout + "\"", templatePath, dest, fileExists_1.fileExists(dest));
-                        }
-                    }
-                });
-            });
+            }
+            else {
+                console.error("Impl \"" + impl + "\", template was not found", templatePath, dest, fileExists_1.fileExists(dest));
+            }
             generateTemplate_1.generateTemplate(componentPath + "/view/index.tsx", readTemplate_1.readTemplate(reactStructure.templates.component.view.index), {
-                ComponentName: componentPath.split('/').slice(-1)[0],
-                Ws: "" + impl.workspace[0].toUpperCase() + impl.workspace.slice(1).toLowerCase(),
+                ComponentName: getComponentName(componentPath),
+                Impl: getImplName(impl),
             });
         });
     });
